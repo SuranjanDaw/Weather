@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">weather</string>
+    <string name="instruction">Enter a City Name to get the current weather condition.</string>
+</resources>
