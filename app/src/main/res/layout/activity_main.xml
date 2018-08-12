@@ -22,28 +22,27 @@
             android:id="@+id/instruction"
             android:layout_marginTop="16dp"
             android:textSize="30dp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:background="#80795548"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter a City Name"
-            android:textAlignment="center"
-            android:padding="8dp"
-            android:id="@+id/cityinput"
-            android:textSize="30dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:background="#99ffecb3"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search City"
+            android:text="Get Location"
+            android:id="@+id/searchLocation"
+            android:textSize="25dp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="50dp"
+            android:background="#80ffecb3"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Weather"
             android:id="@+id/searchWeather"
             android:textSize="25dp"
             android:textColor="@color/colorAccent"
             android:layout_marginTop="50dp"
             android:background="#80ffecb3"/>
+
 
         <TextView
             android:layout_width="match_parent"
@@ -53,7 +52,7 @@
             android:id="@+id/weatherCondition"
             android:layout_marginTop="16dp"
             android:textSize="27dp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:background="#80795548"/>
         <TextView
 
@@ -65,7 +64,7 @@
             android:layout_marginTop="16dp"
             android:textSize="25dp"
             android:background="#80795548"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/white"/>
     </LinearLayout>
 
 

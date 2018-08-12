@@ -6,17 +6,14 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.util.Random;
+public class MyAsyncTask extends AsyncTask<double[],Void,String > {
 
-public class MyAsyncTask extends AsyncTask<String,Void,String > {
-
-    TextView author ;
-    TextView title;
-    public MyAsyncTask(TextView title1, TextView author1){
-        title = title1;
-        author = author1;
+    //TextView wname ;
+    TextView wdetails;
+    public MyAsyncTask(TextView weather1){
+        //wname = title1;
+        wdetails = weather1;
     }
 //    @Override
 //    protected String doInBackground(Void... voids) {
@@ -32,8 +29,8 @@ public class MyAsyncTask extends AsyncTask<String,Void,String > {
 //    }
 
     @Override
-    protected String doInBackground(String... strings) {
-        return NetworkUtil.getBookInfo(strings[0]);
+    protected String doInBackground(double[]... doubles) {
+        return NetworkUtil.getBookInfo(doubles[0]);
     }
 
     @Override
@@ -44,32 +41,33 @@ public class MyAsyncTask extends AsyncTask<String,Void,String > {
             JSONObject jsonObject = new JSONObject(s);
             JSONArray itemsArray = jsonObject.getJSONArray("weather");
             for (int i= 0; i< itemsArray.length(); i++){
-                JSONObject book = itemsArray.getJSONObject(i);
-                String titl = null;
-                String auth = null;
+                JSONObject wea = itemsArray.getJSONObject(i);
+                //String weaName = null;
+                String weaDetails = null;
                 //String price = null;
                 //JSONObject volumeInfo = book.getJSONObject("volumeInfo");
                 try{
-                    titl = book.getString("main");
-                    Log.d("aa",titl);
-                    auth = book.getString("description");
+                    //weaName = wea.getString("main");
+
+                    weaDetails = wea.getString("main");
+                    Log.d("aa",weaDetails);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
                 //int len = auth.length()-2;
                 //Log.d("ab",price);
-                if(title != null && auth !=null) {
-                    author.setText(auth);
-                    title.setText(titl);
+                if(weaDetails !=null) {
+                    wdetails.setText(weaDetails);
+                    //wname.setText(weaName);
                     return;
                 }
             }
-            title.setText("No Result Found");
-            author.setText("");
+            //wname.setText("No Result Found");
+            wdetails.setText("No Result Found");
         }catch (Exception e){
-            title.setText("No Result Found");
-            author.setText("");
+            //wname.setText("No Result Found");
+            wdetails.setText("No Result Found");
             e.printStackTrace();
         }
 

@@ -14,20 +14,24 @@ import java.net.URLConnection;
 
 public class NetworkUtil {
     private static final String BOOK_BASE_URL =  "https://openweathermap.org/data/2.5/weather?"; // Base URI for the Books API
-    private static final String QUERY_PARAM = "q"; // Parameter for the search string
+    private static final String QUERY_PARAM1 = "lon"; // Parameter for the search string
+    private static final String QUERY_PARAM2 = "lat"; // Parameter for the search string
     private static final String APP_ID = "appid"; // Parameter that limits search results
-    private static final String PRINT_TYPE = "printType";   // Parameter to filter by print type
-    private static final String LOG_TAG = NetworkUtil.class.getSimpleName();
 
-    public static String getBookInfo(String q) {
+    public static String getBookInfo(double location[]) {
         HttpURLConnection httpURLConnection = null;
         BufferedReader br = null;
         StringBuffer buffer = new StringBuffer();
         String line;
         String bookJason = null;
+        String lat = Double.toString(location[0]);
+        String lon = Double.toString(location[1]);
         try {
-            Uri uriBuilder = Uri.parse(BOOK_BASE_URL).buildUpon().appendQueryParameter(QUERY_PARAM, q)
-                    .appendQueryParameter(APP_ID, "b6907d289e10d714a6e88b30761fae22").build();
+            Uri uriBuilder = Uri.parse(BOOK_BASE_URL).buildUpon()
+                    .appendQueryParameter(QUERY_PARAM1, lon)
+                    .appendQueryParameter(QUERY_PARAM2, lat)
+                    .appendQueryParameter(APP_ID, "b6907d289e10d714a6e88b30761fae22")
+                    .build();
             URL req = new URL(uriBuilder.toString());
             httpURLConnection = (HttpURLConnection) req.openConnection();
             httpURLConnection.setRequestMethod("GET");
