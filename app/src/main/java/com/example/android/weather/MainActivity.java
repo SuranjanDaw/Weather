@@ -1,7 +1,11 @@
 package com.example.android.weather;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,7 +22,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import org.w3c.dom.Text;
+import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,10 +32,18 @@ public class MainActivity extends AppCompatActivity {
     private TextView ins;
     private TextView wname;
     private TextView wdetails;
+    private TextView homeWeather;
     private static final String TEXT_STATE = "currentText";
     private FusedLocationProviderClient m;
     private Location mlocation;
     private double location1[];
+    private double locationHome[];
+    private EditText homeAddress;
+    private SharedPreferences sharedPreferences;
+    private static final String myPreference = "homeAddressPreference";
+    private String savedHomeAddress;
+    private double lat;
+    private double lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
         ins = findViewById(R.id.instruction);
         wname = findViewById(R.id.weatherCondition);
         wdetails = findViewById(R.id.weatherDetails);
+        homeWeather = findViewById(R.id.homeWetherStatus);
+        homeAddress = findViewById(R.id.homeAddress);
         location1 = new double[2];
+        locationHome = new double[2];
         Log.d("aa", "inClick11");
         m = LocationServices.getFusedLocationProviderClient(this);
         b1.setOnClickListener(new View.OnClickListener() {
@@ -51,11 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 wname.setText("Loading Location...");
                 wdetails.setText("");
                 getLocation();
-
-                //MyAsyncTask myAsyncTask = new MyAsyncTask(wname, wdetails);
-                //myAsyncTask.execute(location1);
-                //wname.setText("lat:"+location1[0]);
-                //wdetails.setText("lon:"+location1[1]);
 
             }
         });
@@ -72,7 +83,45 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        sharedPreferences = getSharedPreferences(myPreference, Context.MODE_PRIVATE);
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
+        savedHomeAddress = sharedPreferences.getString(myPreference, null);
+        if (savedHomeAddress != null)
+            homeAddress.setText(savedHomeAddress);
 
+
+
+    }
+
+    public void getWeatherHome(View view) {
+        Geocoder gc = new Geocoder(this);
+        if (gc.isPresent()) {
+            List<Address> list = null;
+            try {
+                list = gc.getFromLocationName(savedHomeAddress, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d("aa", e.getMessage());
+            }
+            Address address = list.get(0);
+            lat = address.getLatitude();
+            lng = address.getLongitude();
+            locationHome[0] = lat;
+            locationHome[1] = lng;
+            Log.d("aa",locationHome[0]+"--"+locationHome[1]);
+        }
+        homeWeather.setText("Loading Weather");
+        MyAsyncTask myAsyncTask = new MyAsyncTask(homeWeather);
+        myAsyncTask.execute(locationHome);
+    }
+
+
+    public void saveHomeLocation(View view) {
+        String homeadd = homeAddress.getText().toString();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(myPreference, homeadd);
+        editor.commit();
+        Toast.makeText(MainActivity.this, "Thanks. Your location is saved.", Toast.LENGTH_LONG).show();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -81,28 +130,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            Log.d("aa","**");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //Log.d("aa","**");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-        }
-        else
-        {
-            Log.d("aa","//");
+        } else {
+            //Log.d("aa","//");
 
             m.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    Log.d("aa","++");
+                    //Log.d("aa","++");
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
                         mlocation = location;
-                        wname.setText(getString(R.string.location_text,mlocation.getLatitude(),mlocation.getLongitude(),mlocation.getTime()));
+                        wname.setText(getString(R.string.location_text, mlocation.getLatitude(), mlocation.getLongitude(), mlocation.getTime()));
                         location1[0] = location.getLatitude();
                         location1[1] = location.getLongitude();
-                        Log.d("aa",location1[0]+".."+location1[1]);
-                    }
-                    else if(location == null) Log.d("aa","location null");
+                        Log.d("aa", location1[0] + ".." + location1[1]);
+                    } else if (location == null) Log.d("aa", "location null");
                 }
             });
             Log.d(TAG, "getLocation: permissions granted");
@@ -111,21 +156,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d("aa","123");
+        //Log.d("aa","123");
         switch (requestCode) {
             case REQUEST_LOCATION_PERMISSION:
                 // If the permission is granted, get the location,
                 // otherwise, show a Toast
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("aa","--");
+                    //Log.d("aa","--");
                     getLocation();
                 } else {
-                    Toast.makeText(this,
-                            "Location Permission Denied!!!",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Location Permission Denied!!!", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
 
     }
 }
+

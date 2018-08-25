@@ -9,63 +9,95 @@
         android:layout_height="match_parent"
         android:src="@drawable/weather"
         android:scaleType="centerCrop"/>
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-        <TextView
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/instruction"
-            android:textAlignment="center"
-            android:id="@+id/instruction"
-            android:layout_marginTop="16dp"
-            android:textSize="30dp"
-            android:textColor="@color/white"
-            android:background="#80795548"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Get Location"
-            android:id="@+id/searchLocation"
-            android:textSize="25dp"
-            android:textColor="@color/colorAccent"
-            android:layout_marginTop="50dp"
-            android:background="#80ffecb3"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Get Weather"
-            android:id="@+id/searchWeather"
-            android:textSize="25dp"
-            android:textColor="@color/colorAccent"
-            android:layout_marginTop="50dp"
-            android:background="#80ffecb3"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/instruction"
+                android:textAlignment="center"
+                android:id="@+id/instruction"
+                android:textSize="30dp"
+                android:textColor="@color/white"
+                android:background="#80795548"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Location"
+                android:id="@+id/searchLocation"
+                android:textSize="25dp"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="25dp"
+                android:background="#80ffecb3"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Weather"
+                android:id="@+id/searchWeather"
+                android:textSize="25dp"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="25dp"
+                android:background="#80ffecb3"/>
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Weather Condition"
-            android:textAlignment="center"
-            android:id="@+id/weatherCondition"
-            android:layout_marginTop="16dp"
-            android:textSize="27dp"
-            android:textColor="@color/white"
-            android:background="#80795548"/>
-        <TextView
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Weather Condition"
+                android:textAlignment="center"
+                android:id="@+id/weatherCondition"
+                android:layout_marginTop="25dp"
+                android:textSize="27dp"
+                android:textColor="@color/white"
+                android:background="#80795548"/>
+            <TextView
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Weather Details"
-            android:id="@+id/weatherDetails"
-            android:textAlignment="center"
-            android:layout_marginTop="16dp"
-            android:textSize="25dp"
-            android:background="#80795548"
-            android:textColor="@color/white"/>
-    </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Weather Details"
+                android:id="@+id/weatherDetails"
+                android:textAlignment="center"
+                android:layout_marginTop="25dp"
+                android:textSize="25dp"
+                android:background="#80795548"
+                android:textColor="@color/white"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your Home Address"
+                android:textAlignment="center"
+                android:layout_marginTop="25dp"
+                android:id="@+id/homeAddress"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SAVE"
+                android:layout_marginLeft="150dp"
+                android:onClick="saveHomeLocation"
+                android:id="@+id/saveHomeButton"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Home Weather"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:layout_marginTop="25dp"
+                android:id="@+id/homeWetherStatus"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Home Weather"
+                android:layout_marginLeft="113dp"
+                android:onClick="getWeatherHome"
+                android:id="@+id/getWeatherHome"/>
+        </LinearLayout>
+
+    </ScrollView>
 
 
 </RelativeLayout>
