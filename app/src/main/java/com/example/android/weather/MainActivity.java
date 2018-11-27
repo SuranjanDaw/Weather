@@ -85,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
         });
         sharedPreferences = getSharedPreferences(myPreference, Context.MODE_PRIVATE);
         //SharedPreferences.Editor editor = sharedPreferences.edit();
-        savedHomeAddress = sharedPreferences.getString(myPreference, null);
-        if (savedHomeAddress != null)
+        //savedHomeAddress = "No Adress";
+        savedHomeAddress = sharedPreferences.getString(myPreference, "No Saved Home Adress");
+        if (savedHomeAddress != "No Saved Home Adress")
             homeAddress.setText(savedHomeAddress);
 
 
@@ -98,17 +99,18 @@ public class MainActivity extends AppCompatActivity {
         if (gc.isPresent()) {
             List<Address> list = null;
             try {
+                Log.d("aab",savedHomeAddress);
                 list = gc.getFromLocationName(savedHomeAddress, 1);
+                Address address = list.get(0);
+                lat = address.getLatitude();
+                lng = address.getLongitude();
+                locationHome[0] = lat;
+                locationHome[1] = lng;
+                Log.d("aa",locationHome[0]+"--"+locationHome[1]);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d("aa", e.getMessage());
             }
-            Address address = list.get(0);
-            lat = address.getLatitude();
-            lng = address.getLongitude();
-            locationHome[0] = lat;
-            locationHome[1] = lng;
-            Log.d("aa",locationHome[0]+"--"+locationHome[1]);
         }
         homeWeather.setText("Loading Weather");
         MyAsyncTask myAsyncTask = new MyAsyncTask(homeWeather);
@@ -119,9 +121,10 @@ public class MainActivity extends AppCompatActivity {
     public void saveHomeLocation(View view) {
         String homeadd = homeAddress.getText().toString();
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        savedHomeAddress = homeadd;
         editor.putString(myPreference, homeadd);
         editor.commit();
-        Toast.makeText(MainActivity.this, "Thanks. Your location is saved.", Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, "Thanks. Your location is saved."+sharedPreferences.getString(myPreference,"hello"), Toast.LENGTH_LONG).show();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
